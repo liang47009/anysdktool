@@ -26,15 +26,11 @@ import brut.util.AaptManager;
 import org.apache.commons.cli.*;
 import org.apache.commons.io.FileUtils;
 import org.dom4j.Document;
-import org.dom4j.DocumentException;
-import org.dom4j.DocumentHelper;
-import org.dom4j.Element;
-import org.dom4j.io.SAXReader;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
+import java.io.InputStream;
+import java.net.URL;
 import java.util.logging.*;
 
 /**
@@ -42,6 +38,15 @@ import java.util.logging.*;
  * @author Connor Tumbleson <connor.tumbleson@gmail.com>
  */
 public class Main {
+    final static String gameFolder = "G:\\amber2\\03_tools\\AndriodPackage\\Release\\GameFolder";
+    final static String gameApk = "G:\\amber2\\03_tools\\AndriodPackage\\Release\\GameApk\\product_anysdk-release.apk";
+
+    final static String channelFolder = "G:\\amber2\\03_tools\\AndriodPackage\\Release\\ChannelFolder";
+    final static String channelApk = "G:\\amber2\\03_tools\\AndriodPackage\\Release\\ChannelApk\\AnySDK_haima.apk";
+
+    final static String UniteFolder = "G:\\amber2\\03_tools\\AndriodPackage\\Release\\UniteFolder";
+    final static String UniteApk = "G:\\amber2\\03_tools\\AndriodPackage\\Release\\UniteApk";
+
     //d -f apk_check_unsigned.apk -o H:\xll\software\apktool\apk_check_unsigned
     public static void main(String[] args) throws Exception {
 //        GameConfig gameConfig = new GameConfig();
@@ -55,24 +60,69 @@ public class Main {
 //        gameConfig.setIniConfig(iniConfig);
 //        Map<String, Config> configs = new HashMap<String, Config>(8);
 //        iniConfig.setConfigs();
-        final String gameFolder = "G:\\amber2\\03_tools\\AndriodPackage\\Release\\GameFolder";
-        final String gameApk = "G:\\amber2\\03_tools\\AndriodPackage\\Release\\GameApk\\product_anysdk-release.apk";
-
-        final String channelFolder = "G:\\amber2\\03_tools\\AndriodPackage\\Release\\ChannelFolder";
-        final String channelApk = "G:\\amber2\\03_tools\\AndriodPackage\\Release\\ChannelApk\\AnySDK_haima.apk";
-
-        final String UniteFolder = "G:\\amber2\\03_tools\\AndriodPackage\\Release\\UniteFolder";
-        final String UniteApk = "G:\\amber2\\03_tools\\AndriodPackage\\Release\\UniteApk";
 
         decode(gameApk, gameFolder);
         decode(channelApk, channelFolder);
 
         mergeFolder(channelFolder, gameFolder);
 
-
         encodeApk(gameFolder, UniteApk + "\\new.apk");
+
+        signApk(UniteApk + "\\new.apk");
+
+        optimizeApk(UniteApk + "\\Signed.apk");
     }
 
+    /**
+     * 优化apk
+     *
+     * @param signedApk apk路径
+     * @throws IOException
+     */
+    private static void optimizeApk(String signedApk) throws IOException {
+        URL url = Main.class.getClassLoader().getResource("zipalign.exe");
+        if (null == url) {
+            System.err.println("zipalign.exe not found!");
+        } else {
+            String fileName = url.getFile();
+            File file = new File(fileName);
+            if (file.exists()) {
+                System.err.println("zipalign.exe: " + file);
+                String command = fileName + " -v 4 " + signedApk + " " + UniteApk + "\\Zipalign.apk";
+                Utils.openExe(command);
+            } else {
+                System.err.println("zipalign.exe not found!");
+            }
+        }
+    }
+
+    /**
+     * 签名
+     *
+     * @param apkFullName apk全名包含路径
+     */
+    private static void signApk(String apkFullName) {
+        // keytool -list -v -keystore debug.keystore -storepass android 查看信息
+        //java –jar SignApk.jar yushan.keystore storepassword aliasname aliaspassword unsigned.apk Signed.apk
+        //jarsigner -verbose -keystore file.keystore -signedjar fileold.apk filenew.apk file.keystore(file.keystorepass)
+        //SignApk.jar 		：签名的jar，填写绝对路径
+        //yushan.keystore	：file.keystore，添加绝对路径
+        //storepassword  	：keystore的密码
+        //aliasname  		：别名名称
+        //aliaspassword  	：别名密码
+        //unsigned.apk		：签名前的apk名称，填写绝对路径
+        //Signed.apk		：签名后的apk名称，填写绝对路径
+        String[] signApkArgs = new String[]{"debug.keystore", "android", "androiddebugkey", "android", apkFullName, UniteApk + "\\Signed.apk"};
+        SignApk.main(signApkArgs);
+    }
+
+    /**
+     * 合成apk
+     *
+     * @param gameFolder 文件夹名称
+     * @param apkName    apk 名字
+     * @throws Exception
+     */
     private static void encodeApk(String gameFolder, String apkName) throws Exception {
         String[] decodeChannelArgs = new String[]{"b", "-f", gameFolder, "-o", apkName};
         decodeWithCommandLine(decodeChannelArgs);
