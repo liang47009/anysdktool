@@ -152,6 +152,9 @@ public class Main {
             }
             String[] signApkArgs = new String[]{"sign", "--ks", path, "--ks-key-alias", "androiddebugkey", "--ks-pass", "pass:android", "--key-pass", "pass:android", apkFullName};
             ApkSignerTool.main(signApkArgs);
+//            apksigner.jar verify -v my.apk
+            String[] verifyApkArgs = new String[]{"verify", "-v", apkFullName};
+            ApkSignerTool.main(verifyApkArgs);
         } else {
             String[] signApkArgs = new String[]{"debug.keystore", "android", "androiddebugkey", "android", apkFullName, UniteApk + "\\Signed.apk"};
             SignApk.main(signApkArgs);
