@@ -18,20 +18,20 @@
       <file leaf-file-name="Main.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/com/yunfeng/anysdk/tool/Main.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="340">
-              <caret line="86" column="39" selection-start-line="86" selection-start-column="39" selection-end-line="86" selection-end-column="39" />
+            <state relative-caret-position="456">
+              <caret line="67" lean-forward="true" selection-start-line="67" selection-end-line="67" />
               <folding>
                 <element signature="n#!!doc" expanded="true" />
                 <element signature="imports" expanded="true" />
-                <element signature="e#19502#19503#0" expanded="true" />
-                <element signature="e#19559#19560#0" expanded="true" />
-                <element signature="e#17181#17215#0" expanded="true" />
-                <element signature="e#29169#29492#0" expanded="true" />
-                <element signature="e#29491#29492#0" expanded="true" />
-                <element signature="e#31940#31941#0" expanded="true" />
-                <element signature="e#31974#31975#0" expanded="true" />
-                <element signature="e#32037#32038#0" expanded="true" />
-                <element signature="e#32083#32084#0" expanded="true" />
+                <element signature="e#19859#19860#0" expanded="true" />
+                <element signature="e#19916#19917#0" expanded="true" />
+                <element signature="e#19923#19957#0" expanded="true" />
+                <element signature="e#31911#32234#0" expanded="true" />
+                <element signature="e#32233#32234#0" expanded="true" />
+                <element signature="e#32297#32298#0" expanded="true" />
+                <element signature="e#32331#32332#0" expanded="true" />
+                <element signature="e#32394#32395#0" expanded="true" />
+                <element signature="e#32440#32441#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -163,50 +163,6 @@
             <path>
               <item name="anysdktool" type="b2602c69:ProjectViewProjectNode" />
               <item name="anysdktool" type="462c0819:PsiDirectoryNode" />
-              <item name="libs" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="anysdktool" type="b2602c69:ProjectViewProjectNode" />
-              <item name="anysdktool" type="462c0819:PsiDirectoryNode" />
-              <item name="libs" type="462c0819:PsiDirectoryNode" />
-              <item name="apksigner.jar" type="ab9368bb:PsiFileNode" />
-            </path>
-            <path>
-              <item name="anysdktool" type="b2602c69:ProjectViewProjectNode" />
-              <item name="anysdktool" type="462c0819:PsiDirectoryNode" />
-              <item name="libs" type="462c0819:PsiDirectoryNode" />
-              <item name="apksigner.jar" type="ab9368bb:PsiFileNode" />
-              <item name="android" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="anysdktool" type="b2602c69:ProjectViewProjectNode" />
-              <item name="anysdktool" type="462c0819:PsiDirectoryNode" />
-              <item name="libs" type="462c0819:PsiDirectoryNode" />
-              <item name="apksigner.jar" type="ab9368bb:PsiFileNode" />
-              <item name="android" type="462c0819:PsiDirectoryNode" />
-              <item name="apksigner" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="anysdktool" type="b2602c69:ProjectViewProjectNode" />
-              <item name="anysdktool" type="462c0819:PsiDirectoryNode" />
-              <item name="out" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="anysdktool" type="b2602c69:ProjectViewProjectNode" />
-              <item name="anysdktool" type="462c0819:PsiDirectoryNode" />
-              <item name="out" type="462c0819:PsiDirectoryNode" />
-              <item name="production" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="anysdktool" type="b2602c69:ProjectViewProjectNode" />
-              <item name="anysdktool" type="462c0819:PsiDirectoryNode" />
-              <item name="out" type="462c0819:PsiDirectoryNode" />
-              <item name="production" type="462c0819:PsiDirectoryNode" />
-              <item name="anysdktool" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="anysdktool" type="b2602c69:ProjectViewProjectNode" />
-              <item name="anysdktool" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
@@ -214,6 +170,13 @@
               <item name="anysdktool" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="tool" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="anysdktool" type="b2602c69:ProjectViewProjectNode" />
+              <item name="anysdktool" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="tool" type="462c0819:PsiDirectoryNode" />
+              <item name="IniConfig.java" type="529ef68f:ClassesTreeStructureProvider$PsiClassOwnerTreeNode" />
             </path>
           </expand>
           <select />
@@ -276,12 +239,27 @@
       <workItem from="1540893316270" duration="839000" />
       <workItem from="1540948823627" duration="8487000" />
       <workItem from="1540975240594" duration="4000000" />
-      <workItem from="1541035402295" duration="2061000" />
+      <workItem from="1541035402295" duration="7052000" />
     </task>
+    <task id="LOCAL-00001" summary="update signer tool">
+      <created>1541037517152</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1541037517152</updated>
+    </task>
+    <task id="LOCAL-00002" summary="add sign verified">
+      <created>1541038370055</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1541038370055</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="19296000" />
+    <option name="totallyTimeSpent" value="24287000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -306,11 +284,11 @@
       <window_info anchor="right" id="Maven Projects" order="7" />
       <window_info anchor="bottom" id="Database Changes" order="7" show_stripe_button="false" />
       <window_info anchor="bottom" id="Version Control" order="10" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.49946696" visible="true" weight="0.32897604" />
+      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.49946696" weight="0.32897604" />
       <window_info anchor="bottom" id="Terminal" order="8" weight="0.32897604" />
       <window_info id="Capture Tool" order="6" />
       <window_info id="Designer" order="3" />
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.26012793" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.26012793" />
       <window_info anchor="right" id="Database" order="6" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.32897604" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
@@ -331,6 +309,11 @@
   </component>
   <component name="VcsContentAnnotationSettings">
     <option name="myLimit" value="2678400000" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="update signer tool" />
+    <MESSAGE value="add sign verified" />
+    <option name="LAST_COMMIT_MESSAGE" value="add sign verified" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -353,15 +336,15 @@
           <folding>
             <element signature="n#!!doc" expanded="true" />
             <element signature="imports" expanded="true" />
-            <element signature="e#19502#19503#0" expanded="true" />
-            <element signature="e#19559#19560#0" expanded="true" />
-            <element signature="e#17181#17215#0" expanded="true" />
-            <element signature="e#29169#29492#0" expanded="true" />
-            <element signature="e#29491#29492#0" expanded="true" />
-            <element signature="e#31940#31941#0" expanded="true" />
-            <element signature="e#31974#31975#0" expanded="true" />
-            <element signature="e#32037#32038#0" expanded="true" />
-            <element signature="e#32083#32084#0" expanded="true" />
+            <element signature="e#19859#19860#0" expanded="true" />
+            <element signature="e#19916#19917#0" expanded="true" />
+            <element signature="e#19923#19957#0" expanded="true" />
+            <element signature="e#31911#32234#0" expanded="true" />
+            <element signature="e#32233#32234#0" expanded="true" />
+            <element signature="e#32297#32298#0" expanded="true" />
+            <element signature="e#32331#32332#0" expanded="true" />
+            <element signature="e#32394#32395#0" expanded="true" />
+            <element signature="e#32440#32441#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -397,15 +380,15 @@
           <folding>
             <element signature="n#!!doc" expanded="true" />
             <element signature="imports" expanded="true" />
-            <element signature="e#19502#19503#0" expanded="true" />
-            <element signature="e#19559#19560#0" expanded="true" />
-            <element signature="e#17181#17215#0" expanded="true" />
-            <element signature="e#29169#29492#0" expanded="true" />
-            <element signature="e#29491#29492#0" expanded="true" />
-            <element signature="e#31940#31941#0" expanded="true" />
-            <element signature="e#31974#31975#0" expanded="true" />
-            <element signature="e#32037#32038#0" expanded="true" />
-            <element signature="e#32083#32084#0" expanded="true" />
+            <element signature="e#19859#19860#0" expanded="true" />
+            <element signature="e#19916#19917#0" expanded="true" />
+            <element signature="e#19923#19957#0" expanded="true" />
+            <element signature="e#31911#32234#0" expanded="true" />
+            <element signature="e#32233#32234#0" expanded="true" />
+            <element signature="e#32297#32298#0" expanded="true" />
+            <element signature="e#32331#32332#0" expanded="true" />
+            <element signature="e#32394#32395#0" expanded="true" />
+            <element signature="e#32440#32441#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -429,15 +412,15 @@
           <folding>
             <element signature="n#!!doc" expanded="true" />
             <element signature="imports" expanded="true" />
-            <element signature="e#19502#19503#0" expanded="true" />
-            <element signature="e#19559#19560#0" expanded="true" />
-            <element signature="e#17181#17215#0" expanded="true" />
-            <element signature="e#29169#29492#0" expanded="true" />
-            <element signature="e#29491#29492#0" expanded="true" />
-            <element signature="e#31940#31941#0" expanded="true" />
-            <element signature="e#31974#31975#0" expanded="true" />
-            <element signature="e#32037#32038#0" expanded="true" />
-            <element signature="e#32083#32084#0" expanded="true" />
+            <element signature="e#19859#19860#0" expanded="true" />
+            <element signature="e#19916#19917#0" expanded="true" />
+            <element signature="e#19923#19957#0" expanded="true" />
+            <element signature="e#31911#32234#0" expanded="true" />
+            <element signature="e#32233#32234#0" expanded="true" />
+            <element signature="e#32297#32298#0" expanded="true" />
+            <element signature="e#32331#32332#0" expanded="true" />
+            <element signature="e#32394#32395#0" expanded="true" />
+            <element signature="e#32440#32441#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -449,15 +432,15 @@
           <folding>
             <element signature="n#!!doc" expanded="true" />
             <element signature="imports" expanded="true" />
-            <element signature="e#19502#19503#0" expanded="true" />
-            <element signature="e#19559#19560#0" expanded="true" />
-            <element signature="e#17181#17215#0" expanded="true" />
-            <element signature="e#29169#29492#0" expanded="true" />
-            <element signature="e#29491#29492#0" expanded="true" />
-            <element signature="e#31940#31941#0" expanded="true" />
-            <element signature="e#31974#31975#0" expanded="true" />
-            <element signature="e#32037#32038#0" expanded="true" />
-            <element signature="e#32083#32084#0" expanded="true" />
+            <element signature="e#19859#19860#0" expanded="true" />
+            <element signature="e#19916#19917#0" expanded="true" />
+            <element signature="e#19923#19957#0" expanded="true" />
+            <element signature="e#31911#32234#0" expanded="true" />
+            <element signature="e#32233#32234#0" expanded="true" />
+            <element signature="e#32297#32298#0" expanded="true" />
+            <element signature="e#32331#32332#0" expanded="true" />
+            <element signature="e#32394#32395#0" expanded="true" />
+            <element signature="e#32440#32441#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -609,20 +592,20 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/yunfeng/anysdk/tool/Main.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="340">
-          <caret line="86" column="39" selection-start-line="86" selection-start-column="39" selection-end-line="86" selection-end-column="39" />
+        <state relative-caret-position="456">
+          <caret line="67" lean-forward="true" selection-start-line="67" selection-end-line="67" />
           <folding>
             <element signature="n#!!doc" expanded="true" />
             <element signature="imports" expanded="true" />
-            <element signature="e#19502#19503#0" expanded="true" />
-            <element signature="e#19559#19560#0" expanded="true" />
-            <element signature="e#17181#17215#0" expanded="true" />
-            <element signature="e#29169#29492#0" expanded="true" />
-            <element signature="e#29491#29492#0" expanded="true" />
-            <element signature="e#31940#31941#0" expanded="true" />
-            <element signature="e#31974#31975#0" expanded="true" />
-            <element signature="e#32037#32038#0" expanded="true" />
-            <element signature="e#32083#32084#0" expanded="true" />
+            <element signature="e#19859#19860#0" expanded="true" />
+            <element signature="e#19916#19917#0" expanded="true" />
+            <element signature="e#19923#19957#0" expanded="true" />
+            <element signature="e#31911#32234#0" expanded="true" />
+            <element signature="e#32233#32234#0" expanded="true" />
+            <element signature="e#32297#32298#0" expanded="true" />
+            <element signature="e#32331#32332#0" expanded="true" />
+            <element signature="e#32394#32395#0" expanded="true" />
+            <element signature="e#32440#32441#0" expanded="true" />
           </folding>
         </state>
       </provider>

@@ -65,6 +65,8 @@ public class Main {
         decode(gameApk, gameFolder);
         decode(channelApk, channelFolder);
         mergeFolder(channelFolder, gameFolder);
+
+
         encodeApk(gameFolder, UniteApk + "\\new.apk");
         signApk(UniteApk + "\\new.apk");
         optimizeApk(UniteApk + "\\Signed.apk");
@@ -93,7 +95,7 @@ public class Main {
     }
 
     /**
-     * 签名
+     * apk签名
      *
      * @param apkFullName apk全名包含路径
      */
@@ -152,13 +154,24 @@ public class Main {
             }
             String[] signApkArgs = new String[]{"sign", "--ks", path, "--ks-key-alias", "androiddebugkey", "--ks-pass", "pass:android", "--key-pass", "pass:android", apkFullName};
             ApkSignerTool.main(signApkArgs);
-//            apksigner.jar verify -v my.apk
-            String[] verifyApkArgs = new String[]{"verify", "-v", apkFullName};
-            ApkSignerTool.main(verifyApkArgs);
+            verifyApk(apkFullName);
         } else {
             String[] signApkArgs = new String[]{"debug.keystore", "android", "androiddebugkey", "android", apkFullName, UniteApk + "\\Signed.apk"};
             SignApk.main(signApkArgs);
+            verifyApk(UniteApk + "\\Signed.apk");
         }
+    }
+
+    /**
+     * 效验apk
+     *
+     * @param apkFullName apk路径
+     * @throws Exception
+     */
+    private static void verifyApk(String apkFullName) throws Exception {
+        // apksigner.jar verify -v my.apk
+        String[] verifyApkArgs = new String[]{"verify", "-v", apkFullName};
+        ApkSignerTool.main(verifyApkArgs);
     }
 
     /**
@@ -230,11 +243,24 @@ public class Main {
         }
     }
 
+    /**
+     * 反编译apk
+     *
+     * @param apk    apk文件
+     * @param folder 输出目录
+     * @throws Exception
+     */
     private static void decode(String apk, String folder) throws Exception {
         String[] decodeChannelArgs = new String[]{"d", "-f", apk, "-o", folder};
         decodeWithCommandLine(decodeChannelArgs);
     }
 
+    /**
+     * 命令行(apktool main方法)
+     *
+     * @param args 参数
+     * @throws Exception
+     */
     private static void decodeWithCommandLine(String[] args) throws Exception {
 
         // set verbosity default
