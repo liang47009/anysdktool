@@ -23,6 +23,7 @@ import brut.androlib.err.OutDirExistsException;
 import brut.common.BrutException;
 import brut.directory.DirectoryException;
 import brut.util.AaptManager;
+import com.android.apksigner.ApkSignerTool;
 import org.apache.commons.cli.*;
 import org.apache.commons.io.FileUtils;
 import org.dom4j.Document;
@@ -63,13 +64,9 @@ public class Main {
 
         decode(gameApk, gameFolder);
         decode(channelApk, channelFolder);
-
         mergeFolder(channelFolder, gameFolder);
-
         encodeApk(gameFolder, UniteApk + "\\new.apk");
-
         signApk(UniteApk + "\\new.apk");
-
         optimizeApk(UniteApk + "\\Signed.apk");
     }
 
@@ -87,7 +84,6 @@ public class Main {
             String fileName = url.getFile();
             File file = new File(fileName);
             if (file.exists()) {
-                System.err.println("zipalign.exe: " + file);
                 String command = fileName + " -v 4 " + signedApk + " " + UniteApk + "\\Zipalign.apk";
                 Utils.openExe(command);
             } else {
@@ -101,7 +97,7 @@ public class Main {
      *
      * @param apkFullName apk全名包含路径
      */
-    private static void signApk(String apkFullName) {
+    private static void signApk(String apkFullName) throws Exception {
         // keytool -list -v -keystore debug.keystore -storepass android 查看信息
         //java –jar SignApk.jar yushan.keystore storepassword aliasname aliaspassword unsigned.apk Signed.apk
         //jarsigner -verbose -keystore file.keystore -signedjar fileold.apk filenew.apk file.keystore(file.keystorepass)
@@ -112,8 +108,54 @@ public class Main {
         //aliaspassword  	：别名密码
         //unsigned.apk		：签名前的apk名称，填写绝对路径
         //Signed.apk		：签名后的apk名称，填写绝对路径
-        String[] signApkArgs = new String[]{"debug.keystore", "android", "androiddebugkey", "android", apkFullName, UniteApk + "\\Signed.apk"};
-        SignApk.main(signApkArgs);
+//        apksigner sign --ks release.jks app.apk
+//        apksigner verify --verbose app.apk
+//        --ks                  Load private key and certificate chain from the Java
+//        KeyStore initialized from the specified file. NONE means
+//        no file is needed by KeyStore, which is the case for some
+//        PKCS #11 KeyStores.
+//
+//        --ks-key-alias        Alias under which the private key and certificate are
+//        stored in the KeyStore. This must be specified if the
+//        KeyStore contains multiple keys.
+//
+//        --ks-pass             KeyStore password (see --ks). The following formats are
+//        supported:
+//        pass:<password> password provided inline
+//        env:<name>      password provided in the named
+//        environment variable
+//        file:<file>     password provided in the named
+//        file, as a single line
+//        stdin           password provided on standard input,
+//        as a single line
+//        A password is required to open a KeyStore.
+//        By default, the tool will prompt for password via console
+//        or standard input.
+//                When the same file (including standard input) is used for
+//        providing multiple passwords, the passwords are read from
+//        the file one line at a time. Passwords are read in the
+//        order in which signers are specified and, within each
+//        signer, KeyStore password is read before the key password
+//        is read.
+//
+//        --key-pass            Password with which the private key is protected.
+//        The following formats are supported:
+        boolean useAndroidSigner = true;// 使用安卓原生apksigner
+        if (useAndroidSigner) {
+            String path = "";
+            URL url = Main.class.getClassLoader().getResource("");
+            if (null == url) {
+
+            } else {
+                String fileStr = url.getFile();
+                path = fileStr + "debug.keystore";
+            }
+            String[] signApkArgs = new String[]{"sign", "--ks", path, "--ks-key-alias", "androiddebugkey", "--ks-pass", "pass:android", "--key-pass", "pass:android", apkFullName};
+            ApkSignerTool.main(signApkArgs);
+        } else {
+            String[] signApkArgs = new String[]{"debug.keystore", "android", "androiddebugkey", "android", apkFullName, UniteApk + "\\Signed.apk"};
+            SignApk.main(signApkArgs);
+        }
     }
 
     /**
