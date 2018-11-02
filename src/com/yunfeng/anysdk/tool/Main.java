@@ -26,12 +26,15 @@ import brut.util.AaptManager;
 import com.android.apksigner.ApkSignerTool;
 import org.apache.commons.cli.*;
 import org.apache.commons.io.FileUtils;
+import org.dom4j.Attribute;
 import org.dom4j.Document;
+import org.dom4j.Element;
 
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.URL;
+import java.util.Iterator;
 import java.util.logging.*;
 
 /**
@@ -47,6 +50,9 @@ public class Main {
 
     final static String UniteFolder = "G:\\amber2\\03_tools\\AndriodPackage\\Release\\UniteFolder";
     final static String UniteApk = "G:\\amber2\\03_tools\\AndriodPackage\\Release\\UniteApk";
+    final static boolean useAndroidSigner = true;// 使用安卓原生apksigner
+
+    final static String targetPackageName = "com.mufeng.game.apktool";
 
     //d -f apk_check_unsigned.apk -o H:\xll\software\apktool\apk_check_unsigned
     public static void main(String[] args) throws Exception {
@@ -66,10 +72,14 @@ public class Main {
         decode(channelApk, channelFolder);
         mergeFolder(channelFolder, gameFolder);
 
-
         encodeApk(gameFolder, UniteApk + "\\new.apk");
         signApk(UniteApk + "\\new.apk");
-        optimizeApk(UniteApk + "\\Signed.apk");
+        if (useAndroidSigner) {
+            optimizeApk(UniteApk + "\\new.apk");
+        } else {
+            optimizeApk(UniteApk + "\\Signed.apk");
+        }
+
     }
 
     /**
@@ -81,7 +91,7 @@ public class Main {
     private static void optimizeApk(String signedApk) throws IOException {
         URL url = Main.class.getClassLoader().getResource("zipalign.exe");
         if (null == url) {
-            System.err.println("zipalign.exe not found!");
+            Log.d("zipalign.exe not found!");
         } else {
             String fileName = url.getFile();
             File file = new File(fileName);
@@ -89,7 +99,7 @@ public class Main {
                 String command = fileName + " -v 4 " + signedApk + " " + UniteApk + "\\Zipalign.apk";
                 Utils.openExe(command);
             } else {
-                System.err.println("zipalign.exe not found!");
+                Log.d("zipalign.exe not found!");
             }
         }
     }
@@ -100,49 +110,6 @@ public class Main {
      * @param apkFullName apk全名包含路径
      */
     private static void signApk(String apkFullName) throws Exception {
-        // keytool -list -v -keystore debug.keystore -storepass android 查看信息
-        //java –jar SignApk.jar yushan.keystore storepassword aliasname aliaspassword unsigned.apk Signed.apk
-        //jarsigner -verbose -keystore file.keystore -signedjar fileold.apk filenew.apk file.keystore(file.keystorepass)
-        //SignApk.jar 		：签名的jar，填写绝对路径
-        //yushan.keystore	：file.keystore，添加绝对路径
-        //storepassword  	：keystore的密码
-        //aliasname  		：别名名称
-        //aliaspassword  	：别名密码
-        //unsigned.apk		：签名前的apk名称，填写绝对路径
-        //Signed.apk		：签名后的apk名称，填写绝对路径
-//        apksigner sign --ks release.jks app.apk
-//        apksigner verify --verbose app.apk
-//        --ks                  Load private key and certificate chain from the Java
-//        KeyStore initialized from the specified file. NONE means
-//        no file is needed by KeyStore, which is the case for some
-//        PKCS #11 KeyStores.
-//
-//        --ks-key-alias        Alias under which the private key and certificate are
-//        stored in the KeyStore. This must be specified if the
-//        KeyStore contains multiple keys.
-//
-//        --ks-pass             KeyStore password (see --ks). The following formats are
-//        supported:
-//        pass:<password> password provided inline
-//        env:<name>      password provided in the named
-//        environment variable
-//        file:<file>     password provided in the named
-//        file, as a single line
-//        stdin           password provided on standard input,
-//        as a single line
-//        A password is required to open a KeyStore.
-//        By default, the tool will prompt for password via console
-//        or standard input.
-//                When the same file (including standard input) is used for
-//        providing multiple passwords, the passwords are read from
-//        the file one line at a time. Passwords are read in the
-//        order in which signers are specified and, within each
-//        signer, KeyStore password is read before the key password
-//        is read.
-//
-//        --key-pass            Password with which the private key is protected.
-//        The following formats are supported:
-        boolean useAndroidSigner = true;// 使用安卓原生apksigner
         if (useAndroidSigner) {
             String path = "";
             URL url = Main.class.getClassLoader().getResource("");
@@ -152,7 +119,7 @@ public class Main {
                 String fileStr = url.getFile();
                 path = fileStr + "debug.keystore";
             }
-            String[] signApkArgs = new String[]{"sign", "--ks", path, "--ks-key-alias", "androiddebugkey", "--ks-pass", "pass:android", "--key-pass", "pass:android", apkFullName};
+            String[] signApkArgs = new String[]{"sign", "--ks", path, "--ks-key-alias", "androiddebugkey", "--ks-pass", "pass:android", "--key-pass", "pass:android", "--v2-signing-enabled", "false", apkFullName};
             ApkSignerTool.main(signApkArgs);
             verifyApk(apkFullName);
         } else {
@@ -192,12 +159,15 @@ public class Main {
      * @param channelFolder 渠道目录
      * @param gameFolder    游戏目录
      */
-    private static void mergeFolder(String channelFolder, String gameFolder) {
+    private static void mergeFolder(String channelFolder, String gameFolder) throws Exception {
+        ApkToolYml channelApkYml = null;
+        Document channelDoc = null;
+
         File channelDir = new File(channelFolder);
         if (channelDir.exists() && channelDir.isDirectory()) {
             File[] files = channelDir.listFiles();
             if (files == null) {
-                System.err.println("channel folder: " + channelFolder + " not found");
+                Log.d("channel folder: " + channelFolder + " not found");
             } else {
                 for (File file : files) {
                     if (file.isDirectory()) {
@@ -205,17 +175,98 @@ public class Main {
                             continue;
                         }
                         if (!copyFile(file.getAbsolutePath(), gameFolder)) {
-                            System.err.println("copy: " + file.getAbsolutePath() + " to " + gameFolder + " failed!");
+                            Log.e("copy: " + file.getAbsolutePath() + " to " + gameFolder + " failed!");
                         }
                     } else if (file.getName().equals("AndroidManifest.xml")) {
                         //todo
-                        Document channel = Utils.readDocument(file);
-
+                        channelDoc = Utils.readDocument(file);
+//                        Iterator<Element> elements = channelDoc.getRootElement().elementIterator();
+//                        if (null != elements) {
+//                            parseDocument(elements);
+//                        }
                     } else if (file.getName().equals("apktool.yml")) {
                         //todo
-
+                        channelApkYml = ApkToolYml.load(file);
                     }
                 }
+            }
+        }
+
+        File gameManifestFile = new File(gameFolder + "\\AndroidManifest.xml");
+        if (gameManifestFile.exists() && gameManifestFile.isFile()) {
+            Document gameDoc = Utils.readDocument(gameManifestFile);
+            mergeFile(channelDoc, gameDoc);
+        }
+
+
+    }
+
+    /**
+     * 合并AndroidMenifest.xml
+     *
+     * @param channelDoc 渠道xml
+     * @param gameDoc    游戏xml
+     */
+    private static void mergeFile(Document channelDoc, Document gameDoc) throws IOException {
+        Element elementGame = gameDoc.getRootElement();
+        if (elementGame.getName().equalsIgnoreCase("manifest")) {
+            Attribute packageAttri = elementGame.attribute("package");
+            Log.d("before packageName = " + packageAttri.getValue());
+            packageAttri.setValue(targetPackageName);
+        } else {
+            Log.e("game root element is not manifest");
+        }
+        Element elementChannel = channelDoc.getRootElement();
+
+        mergeElements(elementGame, elementChannel);
+        FileWriter fw = new FileWriter(new File(gameFolder + "\\AndroidManifest.xml"));
+        gameDoc.write(fw);
+        fw.flush();
+        fw.close();
+    }
+
+    private static void mergeElements(Element elementGame, Element elementChannel) {
+        Iterator<Element> channelElements = elementChannel.elementIterator();
+        for (; channelElements.hasNext(); ) {
+            Element eleChannel = channelElements.next();
+            if (eleChannel.isRootElement()) {
+                continue;
+            }
+            if (eleChannel.getName().equalsIgnoreCase("application")) {
+                //activity 等组件配置
+                Element eleGameApp = elementGame.element("application");
+
+                for (Iterator<Element> eleTemps = eleChannel.elementIterator(); eleTemps.hasNext(); ) {
+                    Element eleTemp = eleTemps.next();
+                    eleTemp.setParent(null);
+                    eleGameApp.add(eleTemp);
+                }
+            } else {//权限等配置
+                eleChannel.setParent(null);
+                elementGame.add(eleChannel);
+            }
+        }
+    }
+
+    /**
+     * 递归解析xml
+     *
+     * @param elements
+     */
+    private static void parseDocument(Iterator<Element> elements) {
+        for (; elements.hasNext(); ) {
+            Element e = elements.next();
+            Log.d("element name: " + e.getName() + ", value: " + e.getTextTrim());
+            Iterator<Attribute> attrs = e.attributeIterator();
+            if (attrs != null) {
+                for (; attrs.hasNext(); ) {
+                    Attribute attr = attrs.next();
+                    Log.d("attr name: " + attr.getName() + ", value: " + attr.getValue());
+                }
+            }
+            Iterator<Element> eles = e.elementIterator();
+            if (eles != null) {
+                parseDocument(eles);
             }
         }
     }
@@ -238,7 +289,7 @@ public class Main {
             return true;
         } catch (IOException e) {
             // TODO Auto-generated catch block
-            System.err.println("file Backup error!");
+            Log.d("file Backup error: " + e.getMessage());
             return false;
         }
     }
@@ -276,7 +327,7 @@ public class Main {
         try {
             commandLine = parser.parse(allOptions, args, false);
         } catch (ParseException ex) {
-            System.err.println(ex.getMessage());
+            Log.d(ex.getMessage());
             usage();
             return;
         }
@@ -337,7 +388,7 @@ public class Main {
             decoder.setDecodeSources(ApkDecoder.DECODE_SOURCES_NONE);
         }
         if (cli.hasOption("d") || cli.hasOption("debug")) {
-            System.err.println("SmaliDebugging has been removed in 2.1.0 onward. Please see: https://github.com/iBotPeaches/Apktool/issues/1061");
+            Log.d("SmaliDebugging has been removed in 2.1.0 onward. Please see: https://github.com/iBotPeaches/Apktool/issues/1061");
             System.exit(1);
         }
         if (cli.hasOption("b") || cli.hasOption("no-debug-info")) {
@@ -390,27 +441,25 @@ public class Main {
         try {
             decoder.decode();
         } catch (OutDirExistsException ex) {
-            System.err
-                    .println("Destination directory ("
-                            + outDir.getAbsolutePath()
-                            + ") "
-                            + "already exists. Use -f switch if you want to overwrite it.");
+            Log.e("Destination directory ("
+                    + outDir.getAbsolutePath()
+                    + ") "
+                    + "already exists. Use -f switch if you want to overwrite it.");
             System.exit(1);
         } catch (InFileNotFoundException ex) {
-            System.err.println("Input file (" + apkName + ") " + "was not found or was not readable.");
+            Log.d("Input file (" + apkName + ") " + "was not found or was not readable.");
             System.exit(1);
         } catch (CantFindFrameworkResException ex) {
-            System.err
-                    .println("Can't find framework resources for package of id: "
-                            + String.valueOf(ex.getPkgId())
-                            + ". You must install proper "
-                            + "framework files, see project website for more info.");
+            Log.e("Can't find framework resources for package of id: "
+                    + String.valueOf(ex.getPkgId())
+                    + ". You must install proper "
+                    + "framework files, see project website for more info.");
             System.exit(1);
         } catch (IOException ex) {
-            System.err.println("Could not modify file. Please ensure you have permission.");
+            Log.d("Could not modify file. Please ensure you have permission.");
             System.exit(1);
         } catch (DirectoryException ex) {
-            System.err.println("Could not modify internal dex files. Please ensure you have permission.");
+            Log.d("Could not modify internal dex files. Please ensure you have permission.");
             System.exit(1);
         } finally {
             try {
@@ -431,7 +480,7 @@ public class Main {
             apkOptions.forceBuildAll = true;
         }
         if (cli.hasOption("d") || cli.hasOption("debug")) {
-            System.out.println("SmaliDebugging has been removed in 2.1.0 onward. Please see: https://github.com/iBotPeaches/Apktool/issues/1061");
+            Log.d("SmaliDebugging has been removed in 2.1.0 onward. Please see: https://github.com/iBotPeaches/Apktool/issues/1061");
             apkOptions.debugMode = true;
         }
         if (cli.hasOption("v") || cli.hasOption("verbose")) {
@@ -465,7 +514,7 @@ public class Main {
             }
             new Androlib(apkOptions).build(new File(appDirName), outFile);
         } catch (BrutException ex) {
-            System.err.println(ex.getMessage());
+            Log.d(ex.getMessage());
             System.exit(1);
         }
     }
@@ -505,7 +554,7 @@ public class Main {
     }
 
     private static void _version() {
-        System.out.println(Androlib.getVersion());
+        Log.d(Androlib.getVersion());
     }
 
     @SuppressWarnings("static-access")
@@ -736,16 +785,16 @@ public class Main {
         formatter.setWidth(120);
 
         // print out license info prior to formatter.
-        System.out.println(
+        Log.d(
                 "Apktool v" + Androlib.getVersion() + " - a tool for reengineering Android apk files\n" +
                         "with smali v" + ApktoolProperties.get("smaliVersion") +
                         " and baksmali v" + ApktoolProperties.get("baksmaliVersion") + "\n" +
                         "Copyright 2014 Ryszard Wiśniewski <brut.alll@gmail.com>\n" +
                         "Updated by Connor Tumbleson <connor.tumbleson@gmail.com>");
         if (isAdvanceMode()) {
-            System.out.println("Apache License 2.0 (http://www.apache.org/licenses/LICENSE-2.0)\n");
+            Log.d("Apache License 2.0 (http://www.apache.org/licenses/LICENSE-2.0)\n");
         } else {
-            System.out.println("");
+            Log.d("");
         }
 
         // 4 usage outputs (general, frameworks, decode, build)
@@ -756,15 +805,14 @@ public class Main {
         if (isAdvanceMode()) {
             formatter.printHelp("apktool " + verbosityHelp() + "publicize-resources <file_path>", emptyOptions);
             formatter.printHelp("apktool " + verbosityHelp() + "empty-framework-dir [options]", emptyFrameworkOptions);
-            System.out.println("");
+            Log.d("");
         } else {
-            System.out.println("");
+            Log.d("");
         }
 
         // print out more information
-        System.out.println(
-                "For additional info, see: http://ibotpeaches.github.io/Apktool/ \n"
-                        + "For smali/baksmali info, see: https://github.com/JesusFreke/smali");
+        Log.d("For additional info, see: http://ibotpeaches.github.io/Apktool/ \n"
+                + "For smali/baksmali info, see: https://github.com/JesusFreke/smali");
     }
 
     private static void setupLogging(final Verbosity verbosity) {
